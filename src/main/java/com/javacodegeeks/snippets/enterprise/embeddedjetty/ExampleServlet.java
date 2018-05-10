@@ -1,9 +1,6 @@
 package com.javacodegeeks.snippets.enterprise.embeddedjetty;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 
 import javax.servlet.http.HttpServlet;
@@ -20,14 +17,17 @@ public class ExampleServlet extends HttpServlet {
 
         resp.setStatus(HttpStatus.OK_200);
         try {
-            resp.getWriter().println(readFile());
-        } catch (URISyntaxException e) {
+            Class clazz = EmbeddedJettyMain.class;
+            InputStream inputStream = clazz.getResourceAsStream("example.html");
+            String data = readFromInputStream(inputStream);
+            resp.getWriter().println(data);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private String readFile() throws IOException, URISyntaxException {
-        File file = new File(getClass().getResource("example.html").toURI());
+    private String readFile(String file) throws IOException {
+        //File file = new File(getClass().getResource("example.html").toURI());
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String         line = null;
         StringBuilder  stringBuilder = new StringBuilder();
@@ -44,5 +44,20 @@ public class ExampleServlet extends HttpServlet {
             reader.close();
         }
     }
+
+    private String readFromInputStream(InputStream inputStream)
+            throws IOException {
+        String line;
+        StringBuilder resultStringBuilder = new StringBuilder();
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+
+            while ((line = br.readLine()) != null) {
+                resultStringBuilder.append(line).append("\n");
+            }
+
+        return resultStringBuilder.toString();
+    }
+
+
 }
 
