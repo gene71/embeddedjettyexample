@@ -18,7 +18,7 @@ public class ExampleServlet extends HttpServlet {
         resp.setStatus(HttpStatus.OK_200);
         try {
             Class clazz = EmbeddedJettyMain.class;
-            InputStream inputStream = clazz.getResourceAsStream("example.html");
+            InputStream inputStream = clazz.getResourceAsStream("/resources/example.html");
             String data = readFromInputStream(inputStream);
             resp.getWriter().println(data);
         } catch (Exception e) {
